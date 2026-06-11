@@ -102,3 +102,25 @@
         resultDiv.appendChild(sub);
     }
 </script>
+<div id="translation-section" style="margin-top: 20px; padding: 15px; border-top: 1px solid #eee; text-align: center;">
+    <button id="translate-btn" style="background-color: #6366f1; color: white; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer;">
+        点击翻译为普通话
+    </button>
+    <div id="translation-result" style="margin-top: 10px; font-size: 14px; color: #4b5563;"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/cn2t.js"></script>
+<script>
+    document.getElementById('translate-btn').addEventListener('click', function() {
+        // 1. 获取输入框里的内容
+        const inputText = document.querySelector('textarea').value;
+        if (!inputText) { alert('请先输入粤语内容'); return; }
+
+        // 2. 转换 (繁体转简体)
+        const converter = OpenCC.Converter({ from: 'hk', to: 'cn' });
+        const result = converter.convertSync(inputText);
+
+        // 3. 显示结果
+        document.getElementById('translation-result').innerText = '普通话参考：' + result;
+    });
+</script>
