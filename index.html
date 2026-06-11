@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head>
+<!doctype html><html lang="zh-CN"><script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/cn2t.js"></script><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>粤语拼音转换 (Jyutping)</title>
@@ -66,4 +66,39 @@
             if (splash) splash.style.display = 'none';
         }, 500);
     });
+</script>
+<script>
+    // 监听你的转换按钮点击（假设按钮叫转换，我们稍微延迟一下，等结果出来）
+    document.addEventListener('click', function(e) {
+        if (e.target.innerText.includes('转换') || e.target.classList.contains('mode-btn')) {
+            setTimeout(renderTranslation, 500); 
+        }
+    });
+
+    async function renderTranslation() {
+        // 1. 获取你的输出结果区域（这里需要你观察一下网页上显示结果的那个div的类名，比如 .output-box）
+        // 如果你不确定，我们可以假设它在某个容器里
+        const resultDiv = document.querySelector('.output-box'); // 请把这里换成你网页显示结果的那个区域的class
+        if (!resultDiv) return;
+
+        // 2. 如果已经翻译过了，就不要重复添加
+        if (resultDiv.querySelector('.mandarin-sub')) return;
+
+        // 3. 读取原始内容
+        const originalText = resultDiv.innerText;
+
+        // 4. 调用 OpenCC 进行繁转简（这是最简单的方案）
+        const converter = OpenCC.Converter({ from: 'hk', to: 'cn' });
+        const mandarinText = converter.convertSync(originalText);
+
+        // 5. 创建小号字体的翻译块，并插入到结果下面
+        const sub = document.createElement('div');
+        sub.className = 'mandarin-sub';
+        sub.style.fontSize = '12px';
+        sub.style.color = '#666';
+        sub.style.marginTop = '5px';
+        sub.innerText = '普通话参考：' + mandarinText;
+        
+        resultDiv.appendChild(sub);
+    }
 </script>
