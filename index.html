@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/cn2t.js"></script><head>
+<!doctype html><html lang="zh-CN"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>粤语拼音转换 (Jyutping)</title>
@@ -67,60 +67,6 @@
         }, 500);
     });
 </script>
-<script>
-    // 监听你的转换按钮点击（假设按钮叫转换，我们稍微延迟一下，等结果出来）
-    document.addEventListener('click', function(e) {
-        if (e.target.innerText.includes('转换') || e.target.classList.contains('mode-btn')) {
-            setTimeout(renderTranslation, 500); 
-        }
-    });
 
-    async function renderTranslation() {
-        // 1. 获取你的输出结果区域（这里需要你观察一下网页上显示结果的那个div的类名，比如 .output-box）
-        // 如果你不确定，我们可以假设它在某个容器里
-        const resultDiv = document.querySelector('.output-box'); // 请把这里换成你网页显示结果的那个区域的class
-        if (!resultDiv) return;
-
-        // 2. 如果已经翻译过了，就不要重复添加
-        if (resultDiv.querySelector('.mandarin-sub')) return;
-
-        // 3. 读取原始内容
-        const originalText = resultDiv.innerText;
-
-        // 4. 调用 OpenCC 进行繁转简（这是最简单的方案）
-        const converter = OpenCC.Converter({ from: 'hk', to: 'cn' });
-        const mandarinText = converter.convertSync(originalText);
-
-        // 5. 创建小号字体的翻译块，并插入到结果下面
-        const sub = document.createElement('div');
-        sub.className = 'mandarin-sub';
-        sub.style.fontSize = '12px';
-        sub.style.color = '#666';
-        sub.style.marginTop = '5px';
-        sub.innerText = '普通话参考：' + mandarinText;
-        
-        resultDiv.appendChild(sub);
-    }
-</script>
-<div id="translation-section" style="margin-top: 20px; padding: 15px; border-top: 1px solid #eee; text-align: center;">
-    <button id="translate-btn" style="background-color: #6366f1; color: white; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer;">
-        点击翻译为普通话
-    </button>
-    <div id="translation-result" style="margin-top: 10px; font-size: 14px; color: #4b5563;"></div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/cn2t.js"></script>
-<script>
-    document.getElementById('translate-btn').addEventListener('click', function() {
-        // 1. 获取输入框里的内容
-        const inputText = document.querySelector('textarea').value;
-        if (!inputText) { alert('请先输入粤语内容'); return; }
-
-        // 2. 转换 (繁体转简体)
-        const converter = OpenCC.Converter({ from: 'hk', to: 'cn' });
-        const result = converter.convertSync(inputText);
-
-        // 3. 显示结果
-        document.getElementById('translation-result').innerText = '普通话参考：' + result;
     });
 </script>
